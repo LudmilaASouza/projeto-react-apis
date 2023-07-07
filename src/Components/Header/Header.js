@@ -1,4 +1,4 @@
-import { HeaderContainer, LeftHeaderButton } from "./styled" 
+import { HeaderContainer, LeftHeaderButton, RightHeaderButton } from "./styled" 
 
 const Header = ({page, setPage}) => {
     let titlePage;
@@ -29,6 +29,14 @@ const Header = ({page, setPage}) => {
         <HeaderContainer>
             <LeftHeaderButton onClick={() => setPage(nextPage)}>{leftButtonText}</LeftHeaderButton>
             <h1>{titlePage}</h1>
+            {
+                page === 2 ? 
+                <RightHeaderButton>
+                    Adicionar / Remover da Pokedex
+                </RightHeaderButton>
+                :
+                <> </>
+            }
         </HeaderContainer>
     );
 };
