@@ -11,17 +11,17 @@ const Router = () => {
     const addPokemon = (pokemon) => {
         setPokedex([...pokedex, pokemon])
     }
-    /*const removerPokemon = (pokeName) => {
+    const removePokemon = (pokeName) => {
         setPokedex(pokedex.filter((poke) => poke.name !== pokeName))
-    }*/
+    }
 
 
     return (
         <BrowserRouter>
-        <Header />
+        <Header pokedex={pokedex} setPokedex={setPokedex} removePokemon={removePokemon} />
             <Routes>
                 <Route path="/" element={<PokemonsLisPage pokedex={pokedex} setPokedex={setPokedex} addPokemon={addPokemon} />} />
-                <Route path="/pokedex" element={<PokedexPage />} />
+                <Route path="/pokedex" element={<PokedexPage pokedex={pokedex} setPokedex={setPokedex} removePokemon={removePokemon} />} />
                 <Route path="/detalhes/:nome" element={<PokemonDetailPage />} />
             </Routes>
         </BrowserRouter>
