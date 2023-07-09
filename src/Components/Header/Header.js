@@ -1,14 +1,23 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { HeaderContainer, LeftHeaderButton, RightHeaderButton } from "./styled" 
 import { goToPokedexPage, goToPokemonsListPage } from "../../Router/coordinator";
+import { getPokemonByName } from "../../API/request";
 
-const Header = ({page, setPage}) => {
+const Header = ({pokedex, setPokedex, removePokemon}) => {
     let titlePage;
     let leftButtonText;
     let nextPage;
 
     const {pathname} = useLocation();
     const navigate = useNavigate();
+    const pokeName = pathname.split("/")[2];
+
+    const isPokemonInPokedex = pokedex.find((poke) => poke.name === pokeName)
+    const addPokedex = (name) => {
+        getPokemonByName(name, (pokeData) => {
+            setPokedex([...pokedex, pokeData])
+        })
+    }
 
     if(pathname === "/"){
         titlePage = "Lista de Pokemons"
@@ -19,7 +28,7 @@ const Header = ({page, setPage}) => {
         leftButtonText = "Voltar para lista de Pokemons"
         nextPage = () => goToPokemonsListPage(navigate)
     } else if(pathname.includes("/detalhes/")){
-        titlePage = pathname.split("/")[2]
+        titlePage = pokeName
         leftButtonText = "Voltar"
         nextPage = () => goToPokemonsListPage(navigate)
     }
@@ -29,13 +38,12 @@ const Header = ({page, setPage}) => {
         <HeaderContainer>
             <LeftHeaderButton onClick={nextPage}>{leftButtonText}</LeftHeaderButton>
             <h1>{titlePage}</h1>
-            { pathname.includes("/detalhes/") ? (
-                <RightHeaderButton>
-                    Adicionar / Remover da Pokedex
-                </RightHeaderButton>
-            )  : (
-                <> </>
-            )}
+            { pathname.includes("/detalhes/") &&
+            (isPokemonInPokedex ? (
+                <RightHeaderButton onClick={() => removePokemon(pokeName)}> Remover da Pokedex </RightHeaderButton>
+                ) : (
+                <RightHeaderButton onClick={() => addPokedex(pokeName)}> Adicionar a Pokedex </RightHeaderButton>
+            ))}
         </HeaderContainer>
     );
 };
