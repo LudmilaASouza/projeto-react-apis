@@ -11,7 +11,7 @@ const PokemonCard = ({poke}) => {
             </ImgContainer>
             <ButtonContainer>
                 <button> Adicionar </button>
-                <button onClick={() => goToDetailPage(navigate)}> Ver detalhes </button>
+                <button onClick={() => goToDetailPage(navigate, poke.name)}>Detalhes</button>
             </ButtonContainer>
         </PokeCardContainer>
     )

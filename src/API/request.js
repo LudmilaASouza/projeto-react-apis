@@ -14,3 +14,12 @@ export const getAllPokemons = (setData) => {
         console.log(err)
     })
 }
+
+export const getPokemonByName = (name, setData) => {
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    .then((res) => {
+        setData(res.data)
+    }).catch((err) => {
+        console.log(err)
+    })
+}
