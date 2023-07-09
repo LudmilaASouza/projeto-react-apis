@@ -2,8 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { HeaderContainer, LeftHeaderButton, RightHeaderButton } from "./styled" 
 import { goToPokedexPage, goToPokemonsListPage } from "../../Router/coordinator";
 import { getPokemonByName } from "../../API/request";
+import { useContext } from "react";
+import { GlobalStateContext } from "../../Global/GlobalStateContext";
 
-const Header = ({pokedex, setPokedex, removePokemon}) => {
+const Header = () => {
     let titlePage;
     let leftButtonText;
     let nextPage;
@@ -11,6 +13,8 @@ const Header = ({pokedex, setPokedex, removePokemon}) => {
     const {pathname} = useLocation();
     const navigate = useNavigate();
     const pokeName = pathname.split("/")[2];
+
+    const {pokedex, setPokedex, removePokemon} = useContext(GlobalStateContext);
 
     const isPokemonInPokedex = pokedex.find((poke) => poke.name === pokeName)
     const addPokedex = (name) => {
