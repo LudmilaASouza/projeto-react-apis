@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import PokemonCard from "../../Components/PokemonCard/PokemonCard";
-import {PokemonListContainer} from "./styled"
+import {PokemonListContainer, SectionPokemon, Title} from "./styled"
 import { getAllPokemons } from "../../API/request";
 import { GlobalStateContext } from "../../Global/GlobalStateContext";
 
@@ -17,13 +17,16 @@ const PokemonsListPage = () => {
     
     return (
         <PokemonListContainer>
-            {
-                filteredPokemons.map((poke) => {
-                    return (
-                        <PokemonCard key={poke.id} poke={poke} pokedex={pokedex} setPokedex={setPokedex} addPokemon={addPokemon}/>
-                    )
-                })
-            }
+        <Title>Todos Pokémons</Title>
+            <SectionPokemon>
+                {
+                    filteredPokemons.map((poke) => {
+                        return (
+                            <PokemonCard key={poke.id} poke={poke} pokedex={pokedex} setPokedex={setPokedex} addPokemon={addPokemon}/>
+                        )
+                    })
+                }        
+            </SectionPokemon>
         </PokemonListContainer>
     );
 };

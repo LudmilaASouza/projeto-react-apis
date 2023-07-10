@@ -1,12 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { HeaderContainer, LeftHeaderButton, RightHeaderButton } from "./styled" 
+import { HeaderContainer, LeftHeaderButton, LogoImg, RightHeaderButton } from "./styled" 
 import { goToPokedexPage, goToPokemonsListPage } from "../../Router/coordinator";
 import { getPokemonByName } from "../../API/request";
 import { useContext } from "react";
 import { GlobalStateContext } from "../../Global/GlobalStateContext";
+import pokemon from "../../assets/pokemon.png"
 
 const Header = () => {
-    let titlePage;
     let leftButtonText;
     let nextPage;
 
@@ -14,39 +14,40 @@ const Header = () => {
     const navigate = useNavigate();
     const pokeName = pathname.split("/")[2];
 
-    const {pokedex, setPokedex, removePokemon} = useContext(GlobalStateContext);
+    const {pokedex, setPokedex, removePokemon, setIsOpen, setControlModal} = useContext(GlobalStateContext);
 
     const isPokemonInPokedex = pokedex.find((poke) => poke.name === pokeName)
     const addPokedex = (name) => {
+        setIsOpen(true);
+        setControlModal(1);
         getPokemonByName(name, (pokeData) => {
             setPokedex([...pokedex, pokeData])
         })
     }
 
     if(pathname === "/"){
-        titlePage = "Lista de Pokemons"
-        leftButtonText = "Ver minha Pokedex"
         nextPage = () => goToPokedexPage(navigate)
     } else if(pathname === "/pokedex"){
-        titlePage = "Pokedex"
-        leftButtonText = "Voltar para lista de Pokemons"
+        leftButtonText = "Todos Pokémons"
         nextPage = () => goToPokemonsListPage(navigate)
     } else if(pathname.includes("/detalhes/")){
-        titlePage = pokeName
-        leftButtonText = "Voltar"
+        leftButtonText = "Todos Pokémons"
         nextPage = () => goToPokemonsListPage(navigate)
     }
 
     
     return (
         <HeaderContainer>
-            <LeftHeaderButton onClick={nextPage}>{leftButtonText}</LeftHeaderButton>
-            <h1>{titlePage}</h1>
+            {pathname === "/pokedex" || pathname.includes("/detalhes/") ? 
+            <LeftHeaderButton onClick={nextPage}><u>&lt; {leftButtonText}</u></LeftHeaderButton> :
+            <RightHeaderButton onClick={nextPage}><b> Pokédex </b></RightHeaderButton>
+            }            
+            <LogoImg src={pokemon} />
             { pathname.includes("/detalhes/") &&
             (isPokemonInPokedex ? (
-                <RightHeaderButton onClick={() => removePokemon(pokeName)}> Remover da Pokedex </RightHeaderButton>
+                <RightHeaderButton red onClick={() => removePokemon(pokeName)}> Excluir da Pokédex </RightHeaderButton>
                 ) : (
-                <RightHeaderButton onClick={() => addPokedex(pokeName)}> Adicionar a Pokedex </RightHeaderButton>
+                <RightHeaderButton onClick={() => addPokedex(pokeName)}> Adicionar a Pokédex </RightHeaderButton>
             ))}
         </HeaderContainer>
     );
